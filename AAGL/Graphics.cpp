@@ -54,7 +54,7 @@ Shader* Graphics::lazyLoadShader(std::string path) {
     Shader* t = findShader(path);
     if(!t) {
         std::filesystem::path basePath = path;
-        std::string name = basePath.filename();
+        std::string name = basePath.filename().string();
         std::filesystem::path frag = basePath; 
         std::filesystem::path vert = basePath;
         vert.concat("_v.glsl");
