@@ -26,7 +26,7 @@ Shape::Shape(Graphics* g, Mesh* mesh) :mesh(mesh), graphics(g) {
 void Shape::render(glm::mat4 projection) {
     glUseProgram(shader->id);
     glUniformMatrix4fv(glGetUniformLocation(3, "mvp"), 1, false, glm::value_ptr(projection * view * model));
-    glUniform3fv(glGetUniformLocation(3, "col"), 1, glm::value_ptr(col));
+    glUniform4fv(glGetUniformLocation(3, "col"), 1, glm::value_ptr(col));
     if(mesh) {
         glBindVertexArray(mesh->vao);
         if(texture) {
