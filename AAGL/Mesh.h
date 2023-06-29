@@ -9,6 +9,6 @@ class Mesh {
     size_t vertexCount;
     size_t indexCount;
     std::string name;
-    Mesh(std::string name, std::vector<float> &verts);
+    Mesh(std::string name, std::vector<float> &verts, bool hasTexCoords = true);
     ~Mesh();
 };

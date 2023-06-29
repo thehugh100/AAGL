@@ -3,6 +3,8 @@
 #include <iostream>
 #include <glad/glad.h>
 #include "Texture.h"
+#include "Graphics.h"
+#include "AssetFilesystem.h"
 
 Texture::Texture(std::filesystem::path path, const char* data, size_t size) :path(path) {
     textureType = GL_TEXTURE_2D;
@@ -11,6 +13,42 @@ Texture::Texture(std::filesystem::path path, const char* data, size_t size) :pat
 
 Texture::Texture() {
     textureType = GL_TEXTURE_2D;
+}
+
+void Texture::loadCubemap(Graphics* graphics, std::vector<std::filesystem::path> faces)
+{
+	textureType = GL_TEXTURE_CUBE_MAP;
+	glGenTextures(1, &id);
+	glBindTexture(textureType, id);
+
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		size_t size = 0;
+		char* fsData = graphics->assetFilesystem->loadAsset(faces[i], size);
+    	unsigned char* data = stbi_load_from_memory((unsigned char*)fsData, size, &width, &height, &components, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+			);
+			std::cout << "Loaded Cubemap Texture" << path << " (" << width << " x " << height << " x " << components << ")" << std::endl;
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+		}
+
+		graphics->assetFilesystem->freeFile(fsData);
+		stbi_image_free(data);
+	}
+
+	//glGenerateTextureMipmap(textureID);
+	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
 void Texture::loadTexture(const char* data, size_t size) {

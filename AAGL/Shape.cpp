@@ -17,7 +17,8 @@ Shape::Shape(Graphics* g, Mesh* mesh) :mesh(mesh), graphics(g) {
     view = glm::identity<glm::mat4>();
     texture = nullptr;
     shader = g->defaultShader;
-
+    col = glm::vec4(1.);
+    drawType = GL_TRIANGLE_STRIP;
     if(!mesh) {
         std::cout << "Shape::Shape -> Input mesh is nullptr" << std::endl;
     }
@@ -33,6 +34,6 @@ void Shape::render(glm::mat4 projection) {
             glActiveTexture(0);
             glBindTexture(texture->textureType, texture->id);
         }
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, mesh->indexCount);
+        glDrawArrays(drawType, 0, mesh->indexCount);
     }
 }

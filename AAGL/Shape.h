@@ -15,7 +15,7 @@ class Shape {
     glm::mat4 model;
     glm::mat4 view;
     glm::vec4 col;
-
+    unsigned int drawType;
     Mesh* mesh;
     Texture* texture;
     Shader* shader;
