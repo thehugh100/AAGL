@@ -10,7 +10,7 @@ class Shader;
 class Shape {
     public:
     Shape(Graphics* g, Mesh* mesh);
-    void render(glm::mat4 projection);
+    virtual void render(glm::mat4 projection);
 
     glm::mat4 model;
     glm::mat4 view;

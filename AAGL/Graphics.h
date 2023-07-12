@@ -32,4 +32,5 @@ class Graphics {
     Shader* defaultShader;
     Shader* textureShader;
     AssetFilesystem* assetFilesystem;
+
 };
