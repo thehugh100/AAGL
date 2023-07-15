@@ -87,7 +87,7 @@ void SDFFont::loadManifest(std::filesystem::path path) {
 
 	if (manifest.contains("retina")) {
 		if (manifest["retina"]) {
-			retinaScale = manifest["retina_scale"].get<int>();
+			retinaScale = manifest["retina_scale"].get<float>();
 		}
 	}
 
