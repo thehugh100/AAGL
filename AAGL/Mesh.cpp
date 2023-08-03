@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include <iostream>
 
-Mesh::Mesh(std::string name, std::vector<float> &verts, bool hasTexCoords) :name(name) {
+void Mesh::build(std::vector<float> &verts, bool hasTexCoords) {
     vao = 0;
     vbo = 0;
     vertexCount = verts.size();
@@ -11,7 +11,7 @@ Mesh::Mesh(std::string name, std::vector<float> &verts, bool hasTexCoords) :name
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), verts.data(), GL_STATIC_DRAW);
-    std::cout << "Registered VBO: " << name << " (" << verts.size() << ") -> (id: " << vbo << ")" << std::endl;
+    //std::cout << "Registered VBO: " << name << " (" << verts.size() << ") -> (id: " << vbo << ")" << std::endl;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -25,7 +25,20 @@ Mesh::Mesh(std::string name, std::vector<float> &verts, bool hasTexCoords) :name
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    std::cout << "Registered VAO: " << name << " (" << verts.size() << ") -> (id: " << vao << ")" << std::endl;
+    //std::cout << "Registered VAO: " << name << " (" << verts.size() << ") -> (id: " << vao << ")" << std::endl;
+    built = true;
+}
+
+Mesh::Mesh(std::string name, std::vector<float> &verts, bool hasTexCoords) :name(name) {
+    build(verts, hasTexCoords);
+}
+
+Mesh::Mesh(std::string name): name(name) {
+    built = false;
+    vbo = 0;
+    vao = 0;
+    vertexCount = 0;
+    indexCount = 0;
 }
 
 Mesh::~Mesh() {
